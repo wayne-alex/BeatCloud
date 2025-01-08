@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
+  <!-- Cloud shape -->
+  <path d="M280 100 C280 60, 240 30, 200 30 C160 30, 120 60, 120 100 C80 100, 60 140, 80 170 C100 200, 300 200, 320 170 C340 140, 320 100, 280 100" 
+        fill="#4A90E2" />
+  
+  <!-- Music note -->
+  <path d="M180 70 L180 130 C180 145, 165 160, 150 160 C135 160, 120 145, 120 130 C120 115, 135 100, 150 100 C155 100, 160 102, 165 105 L165 55 L200 45 L180 70" 
+        fill="white"/>
+  
+  <!-- Sound waves -->
+  <path d="M220 80 C230 80, 230 120, 220 120" stroke="white" fill="none" stroke-width="6" stroke-linecap="round"/>
+  <path d="M240 70 C255 70, 255 130, 240 130" stroke="white" fill="none" stroke-width="6" stroke-linecap="round"/>
+  <path d="M260 60 C280 60, 280 140, 260 140" stroke="white" fill="none" stroke-width="6" stroke-linecap="round"/>
+</svg>

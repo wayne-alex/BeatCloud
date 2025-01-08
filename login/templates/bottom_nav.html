@@ -1,0 +1,399 @@
+{% extends 'dashboard.html' %}
+{% block home %}
+    <div class="slide-content">
+        <!-- Your Home slide content -->
+        <div class="header-container">
+            <div class="header">
+                <div class="top-bar">
+                    <div class="brand">
+                        <div class="logo">
+                            <span class="material-icons-outlined">cloud</span>
+                        </div>
+                        <div class="brand-name">BeatCloud</div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-button" onclick="togglePanel('search')">
+                            <span class="material-icons-outlined">search</span>
+                        </button>
+                        <button class="action-button" onclick="togglePanel('sort')">
+                            <span class="material-icons-outlined">sort</span>
+                        </button>
+                        <button class="action-button" onclick="togglePanel('settings')">
+                            <span class="material-icons-outlined">settings</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Search Panel -->
+                <div class="search-panel panel" id="searchPanel">
+                    <input type="text" class="search-input" placeholder="Search songs, artists, or albums..."
+                           oninput="searchSongs(this.value)">
+                </div>
+                <!-- Sort Panel -->
+                <div class="sort-panel panel" id="sortPanel">
+                    <div class="sort-option active" onclick="sortSongs('name')">
+                        <span class="material-icons-outlined">sort_by_alpha</span>
+                        <span style="margin-left: 8px;">Name</span>
+                    </div>
+                    <div class="sort-option" onclick="sortSongs('artist')">
+                        <span class="material-icons-outlined">person</span>
+                        <span style="margin-left: 8px;">Artist</span>
+                    </div>
+                    <div class="sort-option" onclick="sortSongs('date')">
+                        <span class="material-icons-outlined">calendar_today</span>
+                        <span style="margin-left: 8px;">Date Added</span>
+                    </div>
+                </div>
+                <!-- Settings Panel -->
+                <div class="settings-panel panel" id="settingsPanel">
+                    <div class="settings-section">
+                        <h3>Playback</h3>
+                        <div class="setting-item">
+                            <label>Offline Mode</label>
+                            <label class="switch">
+                                <input type="checkbox" onchange="toggleSetting('offline')">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>High Quality Streaming</label>
+                            <label class="switch">
+                                <input type="checkbox" checked onchange="toggleSetting('quality')">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h3>Storage</h3>
+                        <div class="setting-item">
+                            <label>Auto-Sync</label>
+                            <label class="switch">
+                                <input type="checkbox" checked onchange="toggleSetting('sync')">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>Download Over WiFi Only</label>
+                            <label class="switch">
+                                <input type="checkbox" checked onchange="toggleSetting('wifi')">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab('songs')">Songs</div>
+                    <div class="tab" onclick="switchTab('devices')">Devices</div>
+                    <div class="tab" onclick="switchTab('playlists')">Playlists</div>
+                    <div class="tab" onclick="switchTab('most-played')">Most Played</div>
+                    <div class="tab" onclick="switchTab('downloads')">Downloads</div>
+                    <div class="tab" onclick="switchTab('personal')">Personal</div>
+                    <div class="tab" onclick="switchTab('trash')">Trash</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="container">
+            {% include 'tabs.html' %}
+
+        </div>
+
+
+        <div class="modal" id="uploadModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Upload Music</div>
+                    <button class="close-modal" onclick="hideUploadModal()">
+                        <span class="material-icons-outlined">close</span>
+                    </button>
+                </div>
+                <div class="dropzone" onclick="triggerFileInput()">
+                        <span class="material-icons-outlined"
+                              style="font-size: 48px; color: #1DB954; margin-bottom: 16px;">cloud_upload</span>
+                    <p>Drag and drop music files here<br>or click to browse</p>
+                    <input type="file" id="fileInput" style="display: none" multiple accept="audio/*"
+                           onchange="handleFileSelect(event)">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block social %}
+    <div class="slide-content">
+        <div class="header-container">
+            <div class="header">
+                <div class="top-bar">
+                    <div class="brand">
+                        <div class="logo">
+                            <span class="material-icons-outlined">people</span>
+                        </div>
+                        <div class="brand-name">Social</div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-button" onclick="toggleNotifications()">
+                            <span class="material-icons-outlined">notifications</span>
+                        </button>
+                        <button class="action-button" onclick="toggleFriendRequests()">
+                            <span class="material-icons-outlined">person_add</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Social Stats Section -->
+            <div class="social-stats-grid">
+                <div class="stat-card">
+                    <span class="material-icons-outlined">group</span>
+                    <div class="stat-info">
+                        <h3>Friends</h3>
+                        <div class="stat-number">248</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="material-icons-outlined">share</span>
+                    <div class="stat-info">
+                        <h3>Shared</h3>
+                        <div class="stat-number">56</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="material-icons-outlined">playlist_add_check</span>
+                    <div class="stat-info">
+                        <h3>Received</h3>
+                        <div class="stat-number">89</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="material-icons-outlined">favorite</span>
+                    <div class="stat-info">
+                        <h3>Likes</h3>
+                        <div class="stat-number">1.2K</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friend Activity Feed -->
+            <div class="social-section">
+                <div class="section-header">
+                    <h2>Friend Activity</h2>
+                    <button class="view-all-btn">View All</button>
+                </div>
+                <div class="activity-feed">
+                    <div class="friend-activity-card">
+                        <div class="friend-avatar">MJ</div>
+                        <div class="activity-content">
+                            <h3>Mike Johnson</h3>
+                            <p>Created new playlist "Summer Vibes 2025"</p>
+                            <span class="activity-time">2 min ago</span>
+                        </div>
+                        <button class="activity-action">
+                            <span class="material-icons-outlined">add_circle_outline</span>
+                        </button>
+                    </div>
+                    <div class="friend-activity-card">
+                        <div class="friend-avatar">AS</div>
+                        <div class="activity-content">
+                            <h3>Anna Smith</h3>
+                            <p>Listening to "Midnight Dreams" Album</p>
+                            <span class="activity-time">15 min ago</span>
+                        </div>
+                        <button class="activity-action">
+                            <span class="material-icons-outlined">headphones</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shared With Me Section -->
+            <div class="social-section">
+                <div class="section-header">
+                    <h2>Shared With Me</h2>
+                    <button class="view-all-btn">View All</button>
+                </div>
+                <div class="shared-playlists">
+                    <div class="playlist-card">
+                        <div class="playlist-cover">
+                            <span class="material-icons-outlined">queue_music</span>
+                        </div>
+                        <div class="playlist-info">
+                            <h3>Workout Mix</h3>
+                            <p>From: David Black</p>
+                            <span class="playlist-stats">32 tracks • 2.4h</span>
+                        </div>
+                    </div>
+                    <div class="playlist-card">
+                        <div class="playlist-cover">
+                            <span class="material-icons-outlined">queue_music</span>
+                        </div>
+                        <div class="playlist-info">
+                            <h3>Chill Evening</h3>
+                            <p>From: Sarah White</p>
+                            <span class="playlist-stats">45 tracks • 3.1h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Music Taste Match -->
+            <div class="social-section">
+                <h2>Music Taste Match</h2>
+                <div class="match-cards">
+                    <div class="match-card">
+                        <div class="match-avatar">RK</div>
+                        <div class="match-info">
+                            <h3>Rachel Kim</h3>
+                            <div class="match-percentage">
+                                <div class="match-bar" style="width: 85%"></div>
+                                <span>85% Match</span>
+                            </div>
+                            <p>12 similar artists</p>
+                        </div>
+                        <button class="follow-btn">Follow</button>
+                    </div>
+                    <div class="match-card">
+                        <div class="match-avatar">TM</div>
+                        <div class="match-info">
+                            <h3>Tom Miller</h3>
+                            <div class="match-percentage">
+                                <div class="match-bar" style="width: 78%"></div>
+                                <span>78% Match</span>
+                            </div>
+                            <p>8 similar artists</p>
+                        </div>
+                        <button class="follow-btn">Follow</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block mycloud %}
+    <div class="slide-content">
+        <!-- Your My Cloud slide content -->
+        <swiper-slide>
+            <div class="header-container">
+                <div class="header">
+                    <div class="top-bar">
+                        <div class="brand">
+                            <div class="logo">
+                                <span class="material-icons-outlined">cloud</span>
+                            </div>
+                            <div class="brand-name">My Cloud</div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-button" onclick="toggleStorageView()">
+                                <span class="material-icons-outlined">storage</span>
+                            </button>
+                            <button class="action-button" onclick="toggleCloudSync()">
+                                <span class="material-icons-outlined">sync</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <!-- Storage Overview Section -->
+                <div class="cloud-section">
+                    <div class="section-header">
+                        <h2>Storage Overview</h2>
+                        <span class="storage-info">14.2 GB used of 20 GB</span>
+                    </div>
+                    <div class="storage-bar">
+                        <div class="storage-fill" style="width: 71%"></div>
+                    </div>
+                    <div class="storage-breakdown">
+                        <div class="storage-type">
+                            <span class="material-icons-outlined" style="color: #1DB954;">music_note</span>
+                            <div class="storage-details">
+                                <span>Music</span>
+                                <span>8.4 GB</span>
+                            </div>
+                        </div>
+                        <div class="storage-type">
+                            <span class="material-icons-outlined" style="color: #FFB400;">playlist_play</span>
+                            <div class="storage-details">
+                                <span>Playlists</span>
+                                <span>3.8 GB</span>
+                            </div>
+                        </div>
+                        <div class="storage-type">
+                            <span class="material-icons-outlined" style="color: #FF4B4B;">album</span>
+                            <div class="storage-details">
+                                <span>Albums</span>
+                                <span>2.0 GB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Section -->
+                <div class="cloud-section">
+                    <h2>Quick Actions</h2>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn">
+                            <span class="material-icons-outlined">backup</span>
+                            <span>Backup Now</span>
+                        </button>
+                        <button class="quick-action-btn">
+                            <span class="material-icons-outlined">cloud_download</span>
+                            <span>Download All</span>
+                        </button>
+                        <button class="quick-action-btn">
+                            <span class="material-icons-outlined">cleaning_services</span>
+                            <span>Clean Up</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Section -->
+                <div class="cloud-section">
+                    <h2>Recent Activity</h2>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <span class="material-icons-outlined">upload_file</span>
+                            <div class="activity-details">
+                                <h3>Summer Playlist Uploaded</h3>
+                                <p>2 hours ago</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <span class="material-icons-outlined">sync</span>
+                            <div class="activity-details">
+                                <h3>Auto Sync Completed</h3>
+                                <p>Yesterday</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Connected Devices Section -->
+                <div class="cloud-section">
+                    <h2>Connected Devices</h2>
+                    <div class="devices-list">
+                        <div class="device-item">
+                            <span class="material-icons-outlined">smartphone</span>
+                            <div class="device-details">
+                                <h3>iPhone 13</h3>
+                                <p>Last synced: 5 min ago</p>
+                            </div>
+                            <span class="device-status active"></span>
+                        </div>
+                        <div class="device-item">
+                            <span class="material-icons-outlined">laptop_mac</span>
+                            <div class="device-details">
+                                <h3>MacBook Pro</h3>
+                                <p>Last synced: 1 hour ago</p>
+                            </div>
+                            <span class="device-status active"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </swiper-slide>
+    </div>
+{% endblock %}

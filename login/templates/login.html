@@ -1,0 +1,468 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeatCloud Login</title>
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <link rel="apple-touch-icon" href="{% static 'beatcloud-logo.svg' %}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #1DB954;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1DB954;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .forgot-password {
+            color: #4A90E2;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: #1DB954;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #1DB954;
+        }
+
+        .error {
+            color: #ff4d4d;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .social-login {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .divider {
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #ccc;
+        }
+
+        .register-link a {
+            color: #1DB954;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 5px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #2d2d2d;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 2rem;
+            color: white;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header svg {
+            color: #ff9800;
+            width: 24px;
+            height: 24px;
+        }
+
+        .device-form-group {
+            margin-bottom: 1rem;
+        }
+
+        .device-form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+
+        .device-form-group input,
+        .device-form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .device-form-group select option {
+            background: #2d2d2d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo">BeatCloud</div>
+    <form id="loginForm" method="POST" action="{% url 'login' %}" onsubmit="return validateForm(event)">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            <div class="error" id="email-error">Please enter a valid email</div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <div class="error" id="password-error">Password is required</div>
+        </div>
+
+        <div class="remember-forgot">
+            <div class="remember-me">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">Remember me</label>
+            </div>
+            <a href="#" class="forgot-password">Forgot Password?</a>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="divider">or</div>
+
+    <div class="social-login">
+        <div class="social-btn">G</div>
+        <div class="social-btn">f</div>
+        <div class="social-btn">in</div>
+    </div>
+
+    <div class="register-link">
+        Don't have an account? <a href="{% url 'register' %}">Register now</a>
+    </div>
+</div>
+
+
+<div id="deviceModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <h2>Alert: New Device Detected</h2>
+        </div>
+        <form id="deviceForm">
+            <div class="device-form-group">
+                <label for="deviceName">Device Name</label>
+                <input type="text" id="deviceName" required>
+            </div>
+            <div class="device-form-group">
+                <label for="deviceOS">Operating System</label>
+                <select id="deviceOS" required>
+                    <option value="">Select OS</option>
+                    <option value="Windows">Windows</option>
+                    <option value="MacOS">MacOS</option>
+                    <option value="Linux">Linux</option>
+                    <option value="Android">Android</option>
+                    <option value="iOS">iOS</option>
+                </select>
+            </div>
+            <div class="device-form-group">
+                <label for="deviceType">Device Type</label>
+                <select id="deviceType" required>
+                    <option value="">Select Type</option>
+                    <option value="desktop">Desktop</option>
+                    <option value="mobile">Mobile</option>
+                    <option value="tablet">Tablet</option>
+                </select>
+            </div>
+            <button type="submit" style="margin-top: 1rem;">Continue</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const deviceId = localStorage.getItem('device_id') || 'None';
+        if (!deviceId) {
+            window.location.href = '/';
+
+        }
+    });
+
+    async function validateForm(event) {
+        event.preventDefault();
+        let isValid = true;
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(email)) {
+            document.getElementById('email-error').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('email-error').style.display = 'none';
+        }
+
+        if (password.length < 1) {
+            document.getElementById('password-error').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('password-error').style.display = 'none';
+        }
+
+        if (isValid) {
+            try {
+                const form = document.getElementById('loginForm');
+                const formData = new FormData(form);
+                const loginButton = document.querySelector('button[type="submit"]');
+                const originalButtonText = loginButton.innerHTML;
+
+                loginButton.disabled = true;
+                loginButton.innerHTML = '<span class="spinner"></span> Loading...';
+
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    let deviceId = localStorage.getItem('device_id');
+                    if (deviceId) {
+                        // Check if the device is valid
+                        const checkResponse = await fetch('/check-deviceId/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({device_id: deviceId})
+                        });
+
+                        const checkResult = await checkResponse.json();
+                        if (checkResponse.ok) {
+                            window.location.href = `/dashboard/${deviceId}`;
+                        } else {
+                            alert('Device not found. Please register a new device.');
+                            document.getElementById('deviceModal').style.display = 'block';
+                        }
+                    } else {
+                        document.getElementById('deviceModal').style.display = 'block';
+                    }
+
+                    // Handle new device registration
+                    document.getElementById('deviceForm').onsubmit = async (e) => {
+                        e.preventDefault();
+                        const deviceData = {
+                            name: document.getElementById('deviceName').value,
+                            os: document.getElementById('deviceOS').value,
+                            type: document.getElementById('deviceType').value
+                        };
+
+                        try {
+                            const deviceResponse = await fetch('/register_device/', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(deviceData)
+                            });
+
+                            const deviceResult = await deviceResponse.json();
+                            if (deviceResponse.ok && deviceResult.device_id) {
+                                localStorage.setItem('device_id', deviceResult.device_id);
+                                window.location.href = `/dashboard/${deviceResult.device_id}`;
+                            } else {
+                                alert('Failed to register device: ' + (deviceResult.error || 'Unknown error'));
+                            }
+                        } catch (error) {
+                            console.error('Error registering device:', error);
+                            alert('Error registering device. Please try again.');
+                        }
+                    };
+                } else {
+                    alert(result.error || 'Login failed.');
+                }
+
+                loginButton.disabled = false;
+                loginButton.innerHTML = originalButtonText;
+            } catch (error) {
+                alert('An error occurred. Please try again.');
+                console.error('Error:', error);
+            }
+        }
+    }
+
+</script>
+<script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

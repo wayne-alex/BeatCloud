@@ -1,0 +1,515 @@
+<div id="songs" class="section active">
+    <div class="upload-section">
+        <button class="upload-button" onclick="showUploadModal()">
+            <span class="material-icons-outlined">upload</span>
+            Upload New Music
+        </button>
+    </div>
+    <div id="stats-bar" class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-value" id="song-count">{{ song_count }}</div>
+            <div class="stat-label">Songs</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="playlist-count">{{ playlist_count }}</div>
+            <div class="stat-label">Playlists</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="device-count">{{ device_count }}</div>
+            <div class="stat-label">Devices</div>
+        </div>
+    </div>
+</div>
+<div id="playlists" class="section">
+    <!-- Featured Playlist -->
+    <div class="featured-playlist">
+        <div class="featured-content">
+            <span class="featured-label">Featured Playlist</span>
+            <h2>Summer Hits 2025</h2>
+            <p>50 tracks • 3.5 hours • Created by You</p>
+            <div class="featured-actions">
+                <button class="primary-action">
+                    <span class="material-icons-outlined">play_circle</span>
+                    Play Now
+                </button>
+                <button class="secondary-action">
+                    <span class="material-icons-outlined">edit</span>
+                </button>
+                <button class="secondary-action">
+                    <span class="material-icons-outlined">share</span>
+                </button>
+            </div>
+        </div>
+        <div class="featured-overlay"></div>
+    </div>
+
+    <!-- Playlist Categories -->
+    <div class="playlist-categories">
+        <button class="category-chip active">All</button>
+        <button class="category-chip">Recently Played</button>
+        <button class="category-chip">Created by You</button>
+        <button class="category-chip">Shared</button>
+        <button class="category-chip">Favorites</button>
+    </div>
+
+    <!-- Create New Playlist Button -->
+    <div class="create-playlist">
+        <button class="create-playlist-btn" onclick="showCreatePlaylistModal()">
+            <span class="material-icons-outlined">add</span>
+            Create New Playlist
+        </button>
+    </div>
+
+    <!-- Playlist Grid -->
+    <div class="playlist-grid">
+        <!-- Recent Playlists -->
+        <div class="playlist-group">
+            <div class="group-header">
+                <h3>Recent Playlists</h3>
+                <button class="view-all">View All</button>
+            </div>
+            <div class="playlist-row">
+                <div class="playlist-item">
+                    <div class="playlist-cover">
+                        <span class="material-icons-outlined">queue_music</span>
+                        <div class="playlist-overlay">
+                            <span class="material-icons-outlined">play_circle</span>
+                        </div>
+                    </div>
+                    <div class="playlist-meta">
+                        <h4>Workout Mix</h4>
+                        <p>32 tracks • 2.1h</p>
+                    </div>
+                    <button class="playlist-menu">
+                        <span class="material-icons-outlined">more_vert</span>
+                    </button>
+                </div>
+                <div class="playlist-item">
+                    <div class="playlist-cover favorite">
+                        <span class="material-icons-outlined">queue_music</span>
+                        <div class="playlist-overlay">
+                            <span class="material-icons-outlined">play_circle</span>
+                        </div>
+                    </div>
+                    <div class="playlist-meta">
+                        <h4>Chill Evening</h4>
+                        <p>45 tracks • 3.2h</p>
+                    </div>
+                    <button class="playlist-menu">
+                        <span class="material-icons-outlined">more_vert</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Most Played -->
+        <div class="playlist-group">
+            <div class="group-header">
+                <h3>Most Played</h3>
+                <button class="view-all">View All</button>
+            </div>
+            <div class="playlist-row">
+                <div class="playlist-item">
+                    <div class="playlist-cover">
+                        <span class="material-icons-outlined">queue_music</span>
+                        <div class="playlist-overlay">
+                            <span class="material-icons-outlined">play_circle</span>
+                        </div>
+                    </div>
+                    <div class="playlist-meta">
+                        <h4>Road Trip</h4>
+                        <p>28 tracks • 1.8h</p>
+                    </div>
+                    <button class="playlist-menu">
+                        <span class="material-icons-outlined">more_vert</span>
+                    </button>
+                </div>
+                <div class="playlist-item">
+                    <div class="playlist-cover">
+                        <span class="material-icons-outlined">queue_music</span>
+                        <div class="playlist-overlay">
+                            <span class="material-icons-outlined">play_circle</span>
+                        </div>
+                    </div>
+                    <div class="playlist-meta">
+                        <h4>Party Mix</h4>
+                        <p>55 tracks • 3.8h</p>
+                    </div>
+                    <button class="playlist-menu">
+                        <span class="material-icons-outlined">more_vert</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="devices" class="section">
+    <div class="section-header">
+        <h2 class="section-title">Connected Devices</h2>
+        <button class="add-device-btn">
+            <span class="material-icons-outlined">add_circle</span>
+            Add Device
+        </button>
+    </div>
+
+    <!-- Current Device -->
+    <div class="device-group">
+        <div class="group-label">Current Device</div>
+        <div class="device-card current">
+            <div class="device-icon">
+                <span class="material-icons-outlined">smartphone</span>
+            </div>
+            <div class="device-info">
+                <div class="device-name">iPhone 13 Pro</div>
+                <div class="device-status">
+                    <span class="status-dot active"></span>
+                    Currently Playing
+                </div>
+                <div class="device-details">
+                    <span class="storage-info">12.4GB used</span>
+                    <span class="separator">•</span>
+                    <span class="sync-info">Last sync: Just now</span>
+                </div>
+            </div>
+            <div class="device-actions">
+                <button class="device-action-btn">
+                    <span class="material-icons-outlined">sync</span>
+                </button>
+                <button class="device-action-btn">
+                    <span class="material-icons-outlined">settings</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other Devices -->
+    <div class="device-group">
+        <div class="group-label">Other Devices</div>
+
+        <!-- MacBook Pro -->
+        <div class="device-card">
+            <div class="device-icon">
+                <span class="material-icons-outlined">laptop_mac</span>
+            </div>
+            <div class="device-info">
+                <div class="device-name">MacBook Pro</div>
+                <div class="device-status">
+                    <span class="status-dot"></span>
+                    Last active 2h ago
+                </div>
+                <div class="device-details">
+                    <span class="storage-info">45.7GB used</span>
+                    <span class="separator">•</span>
+                    <span class="sync-info">Last sync: 2 hours ago</span>
+                </div>
+            </div>
+            <div class="device-actions">
+                <button class="device-action-btn">
+                    <span class="material-icons-outlined">sync</span>
+                </button>
+                <button class="device-action-btn">
+                    <span class="material-icons-outlined">settings</span>
+                </button>
+                <button class="device-action-btn">
+                    <span class="material-icons-outlined">delete_outline</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- iPad -->
+        <div class="device-card">
+            <div class="device-icon">
+                <span class="material-icons-outlined">tablet_mac</span>
+            </div>
+            <div class="device-info">
+                <div class="device-name">iPad Air</div>
+                <div class="device-status">
+                    <span class="status-dot offline"></span>
+                    Offline
+                </div>
+                <div class="device-details">
+                    <span class="storage-info">8.2GB used</span>
+                    <span class="separator">•</span>
+                    <span class="sync-info">Last sync: 3 days ago</span>
+                </div>
+            </div>
+            <div class="device-actions">
+                <button class="device-action-btn">
+                    <span class="material-icons-outlined">sync</span>
+                </button>
+                <button class="device-action-btn">
+                    <span class="material-icons-outlined">settings</span>
+                </button>
+                <button class="device-action-btn">
+                    <span class="material-icons-outlined">delete_outline</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sync Settings -->
+    <div class="sync-settings">
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="material-icons-outlined">sync</span>
+                <div class="setting-text">
+                    <div class="setting-title">Auto-Sync</div>
+                    <div class="setting-description">Automatically sync music across devices</div>
+                </div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="material-icons-outlined">wifi</span>
+                <div class="setting-text">
+                    <div class="setting-title">Sync on Wi-Fi Only</div>
+                    <div class="setting-description">Save mobile data by syncing on Wi-Fi only</div>
+                </div>
+            </div>
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+</div>
+<div id="most-played" class="section">
+    <div class="section-header">
+        <h2 class="section-title">Most Played</h2>
+        <div class="time-filter">
+            <button class="time-btn active">Week</button>
+            <button class="time-btn">Month</button>
+            <button class="time-btn">All Time</button>
+        </div>
+    </div>
+
+    <div class="stats-cards">
+        <div class="stat-highlight-card">
+            <div class="stat-highlight-header">
+                <span class="material-icons-outlined">equalizer</span>
+                <h3>Listening Time</h3>
+            </div>
+            <div class="stat-highlight-value">47.5h</div>
+            <div class="stat-trend positive">
+                <span class="material-icons-outlined">trending_up</span>
+                +2.3h from last week
+            </div>
+        </div>
+        <div class="stat-highlight-card">
+            <div class="stat-highlight-header">
+                <span class="material-icons-outlined">repeat_one</span>
+                <h3>Most Repeated</h3>
+            </div>
+            <div class="stat-highlight-value">Bohemian Rhapsody</div>
+            <div class="stat-trend">42 plays this week</div>
+        </div>
+    </div>
+
+    <div class="top-tracks">
+        <div class="track-row header">
+            <div class="track-rank">#</div>
+            <div class="track-info">Track</div>
+            <div class="track-plays">Plays</div>
+            <div class="track-time">Time</div>
+        </div>
+        <div class="track-row">
+            <div class="track-rank">1</div>
+            <div class="track-info">
+                <div class="track-name">Bohemian Rhapsody</div>
+                <div class="track-artist">Queen</div>
+            </div>
+            <div class="track-plays">42</div>
+            <div class="track-time">2.1h</div>
+        </div>
+        <!-- More track rows... -->
+    </div>
+
+    <div class="listening-patterns">
+        <h3>Daily Listening Pattern</h3>
+        <div class="heatmap">
+            <!-- Simplified heatmap visualization -->
+            <div class="heatmap-row">
+                <div class="heatmap-cell" style="background-color: rgba(29, 185, 84, 0.1)"></div>
+                <div class="heatmap-cell" style="background-color: rgba(29, 185, 84, 0.3)"></div>
+                <div class="heatmap-cell" style="background-color: rgba(29, 185, 84, 0.7)"></div>
+                <!-- More cells... -->
+            </div>
+            <!-- More rows... -->
+        </div>
+    </div>
+</div>
+<div id="downloads" class="section">
+    <div class="downloads-header">
+        <h2 class="section-title">Downloaded Songs</h2>
+        <div class="downloads-actions">
+            <button class="download-action">
+                <span class="material-icons-outlined">download</span>
+                Download All
+            </button>
+            <button class="download-action">
+                <span class="material-icons-outlined">wifi_off</span>
+                Offline Mode
+            </button>
+        </div>
+    </div>
+
+    <div class="storage-info">
+        <div class="storage-bar">
+            <div class="storage-progress" style="width: 65%"></div>
+        </div>
+        <p class="storage-text">4.2 GB used of 8 GB reserved for offline content</p>
+    </div>
+
+    <div class="downloads-filter">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Songs</button>
+        <button class="filter-btn">Albums</button>
+        <button class="filter-btn">Playlists</button>
+    </div>
+
+    <div class="downloads-list">
+        <div class="download-item">
+            <div class="song-thumbnail">
+                <span class="material-icons-outlined">album</span>
+            </div>
+            <div class="song-info">
+                <h3>Sweet Child O' Mine</h3>
+                <p>Guns N' Roses • Appetite for Destruction</p>
+                <div class="download-meta">
+                    <span class="download-size">8.4 MB</span>
+                    <span class="dot-separator">•</span>
+                    <span class="download-quality">320 kbps</span>
+                </div>
+            </div>
+            <div class="download-actions">
+                <button class="icon-button">
+                    <span class="material-icons-outlined">more_vert</span>
+                </button>
+                <span class="material-icons-outlined status-icon">check_circle</span>
+            </div>
+        </div>
+
+        <div class="download-item downloading">
+            <div class="song-thumbnail">
+                <span class="material-icons-outlined">album</span>
+            </div>
+            <div class="song-info">
+                <h3>Bohemian Rhapsody</h3>
+                <p>Queen • A Night at the Opera</p>
+                <div class="download-progress">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 45%"></div>
+                    </div>
+                    <span class="progress-text">45% • 3.2 MB of 7.8 MB</span>
+                </div>
+            </div>
+            <div class="download-actions">
+                <button class="icon-button">
+                    <span class="material-icons-outlined">pause</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="download-item pending">
+            <div class="song-thumbnail">
+                <span class="material-icons-outlined">album</span>
+            </div>
+            <div class="song-info">
+                <h3>Blinding Lights</h3>
+                <p>The Weeknd • After Hours</p>
+                <div class="download-meta">
+                    <span class="download-size">7.2 MB</span>
+                    <span class="dot-separator">•</span>
+                    <span class="download-status">Waiting for WiFi</span>
+                </div>
+            </div>
+            <div class="download-actions">
+                <button class="icon-button">
+                    <span class="material-icons-outlined">download_now</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="personal" class="section">
+    <div class="section-header">
+        <h2 class="section-title">Personal History</h2>
+    </div>
+
+    <div class="history-timeline">
+        <div class="timeline-header">
+            <h3>Your Music Journey</h3>
+            <span>Since Jan 2024</span>
+        </div>
+
+        <div class="milestone-cards">
+            <div class="milestone-card">
+                <div class="milestone-icon">
+                    <span class="material-icons-outlined">military_tech</span>
+                </div>
+                <div class="milestone-content">
+                    <h4>100 Hours Milestone</h4>
+                    <p>Reached on March 15, 2024</p>
+                </div>
+            </div>
+            <div class="milestone-card">
+                <div class="milestone-icon">
+                    <span class="material-icons-outlined">playlist_add_check</span>
+                </div>
+                <div class="milestone-content">
+                    <h4>50 Playlists Created</h4>
+                    <p>Achieved on February 28, 2024</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="genre-evolution">
+            <h3>Genre Evolution</h3>
+            <div class="genre-chart">
+                <div class="genre-bar">
+                    <div class="genre-fill" style="width: 75%; background: #1DB954;">
+                        <span>Rock</span>
+                    </div>
+                </div>
+                <div class="genre-bar">
+                    <div class="genre-fill" style="width: 60%; background: #4A90E2;">
+                        <span>Pop</span>
+                    </div>
+                </div>
+                <!-- More genre bars... -->
+            </div>
+        </div>
+
+        <div class="discovery-insights">
+            <h3>Discovery Insights</h3>
+            <div class="discovery-stats">
+                <div class="discovery-stat">
+                    <div class="stat-circle">
+                        <span>85%</span>
+                    </div>
+                    <p>New Artists Discovered</p>
+                </div>
+                <div class="discovery-stat">
+                    <div class="stat-circle">
+                        <span>120</span>
+                    </div>
+                    <p>New Songs Added</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="trash" class="section">
+    <h2 class="section-title">Recently Deleted</h2>
+    <div class="trash-item">
+        <div class="song-info">
+            <h3>Yesterday</h3>
+            <p>Deleted 2 days ago</p>
+        </div>
+        <button class="restore-button">Restore</button>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeatCloud</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+</head>
+<body>
+<swiper-container initial-slide="0" slides-per-view="1" css-mode="true">
+    <swiper-slide>
+        {% block home %}{% endblock %}
+    </swiper-slide>
+
+
+    <swiper-slide>
+        {% block social %}{% endblock %}
+    </swiper-slide>
+
+
+    <swiper-slide>
+        {% block mycloud %}{% endblock %}
+    </swiper-slide>
+
+</swiper-container>
+{% include 'musicplayer.html' %}
+
+<nav class="bottom-nav">
+    <div class="nav-items">
+        <button class="nav-item active" data-index="0">
+            <span class="material-icons-outlined">home</span>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" data-index="1">
+            <span class="material-icons-outlined">people</span>
+            <span>Social</span>
+        </button>
+        <button class="nav-item" data-index="2">
+            <span class="material-icons-outlined">cloud</span>
+            <span>My Cloud</span>
+        </button>
+    </div>
+</nav>
+
+<script src="{% static 'dashboard.js' %}" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const swiperEl = document.querySelector('swiper-container');
+
+        // Initialize Swiper with parameters
+        const swiperParams = {
+            slidesPerView: 1,
+            cssMode: true
+        };
+
+        Object.assign(swiperEl, swiperParams);
+
+        // Add event listener for slideChange
+        swiperEl.addEventListener('slidechange', function (e) {
+            const activeIndex = e.detail[0].activeIndex;
+            updateNavigation(activeIndex);
+        });
+
+        // Function to update navigation active states
+        function updateNavigation(activeIndex) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            const activeNavItem = document.querySelector(`.nav-item[data-index="${activeIndex}"]`);
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+            }
+        }
+
+        // Handle bottom navigation clicks
+        document.querySelectorAll('.nav-item').forEach((button) => {
+            button.addEventListener('click', function () {
+                const index = parseInt(this.dataset.index, 10);
+                swiperEl.swiper.slideTo(index);
+                updateNavigation(index);
+            });
+        });
+    });
+</script>
+
+
+</body>
+</html>

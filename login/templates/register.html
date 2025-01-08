@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeatCloud Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #1DB954;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1DB954;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .error {
+            color: #ff4d4d;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: #1DB954;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #1DB954;
+        }
+
+        .social-login {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .divider {
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .divider::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .password-strength {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s ease;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 5px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #ccc;
+        }
+
+        .register-link a {
+            color: #1DB954;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo">BeatCloud</div>
+    <form id="registerForm" action=" " method="post" onsubmit="return validateForm(event)">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+            <div class="error" id="username-error">Username must be at least 3 characters</div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            <div class="error" id="email-error">Please enter a valid email</div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <div class="password-strength">
+                <div class="password-strength-bar" id="strength-bar"></div>
+            </div>
+            <div class="error" id="password-error">Password must be at least 8 characters</div>
+        </div>
+
+        <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" name="confirm-password" required>
+            <div class="error" id="confirm-password-error">Passwords do not match</div>
+        </div>
+
+        <button type="submit">Create Account</button>
+    </form>
+
+    <div class="divider">or</div>
+
+    <div class="social-login">
+        <div class="social-btn">G</div>
+        <div class="social-btn">f</div>
+        <div class="social-btn">in</div>
+    </div>
+    <div class="register-link">
+        Have an account? <a href="{% url 'login' %}">Login</a>
+    </div>
+</div>
+
+<script>
+    async function submitForm(event) {
+        event.preventDefault();
+
+        const form = document.getElementById('registerForm');
+        const formData = new FormData(form);
+        const registerButton = document.querySelector('button[type="submit"]');
+        const originalButtonText = registerButton.innerHTML;
+
+        registerButton.disabled = true;
+        registerButton.innerHTML = '<span class="spinner"></span> Loading...';
+
+        try {
+
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to register. Please try again.');
+            }
+
+            const result = await response.json();
+            if (result.error) {
+                throw new Error(result.error);
+            }
+
+            alert(result.message || 'Registration successful!');
+            if (result.device_id) {
+                {#console.log(result.device_id);#}
+                {#localStorage.setItem('device_id', result.device_id);#}
+            }
+            form.reset();
+            window.location.href = "{% url 'login' %}"
+        } catch (error) {
+            alert(error.message || 'An error occurred during registration.');
+        } finally {
+            // Re-enable button
+            registerButton.disabled = false;
+            registerButton.innerHTML = originalButtonText;
+        }
+    }
+
+    // Form validation logic
+    function validateForm(event) {
+        event.preventDefault();
+
+        let isValid = true;
+
+        // Username validation
+        const username = document.getElementById('username');
+        if (username.value.length < 3) {
+            document.getElementById('username-error').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('username-error').style.display = 'none';
+        }
+
+        // Email validation
+        const email = document.getElementById('email');
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email.value)) {
+            document.getElementById('email-error').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('email-error').style.display = 'none';
+        }
+
+        // Password validation
+        const password = document.getElementById('password');
+        if (password.value.length < 8) {
+            document.getElementById('password-error').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('password-error').style.display = 'none';
+        }
+
+        // Confirm password validation
+        const confirmPassword = document.getElementById('confirm-password');
+        if (password.value !== confirmPassword.value) {
+            document.getElementById('confirm-password-error').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('confirm-password-error').style.display = 'none';
+        }
+
+        // If form is valid, proceed to submit
+        if (isValid) {
+            submitForm(event);
+        }
+    }
+
+    // Password strength indicator
+    document.getElementById('password').addEventListener('input', function (e) {
+        const password = e.target.value;
+        const strengthBar = document.getElementById('strength-bar');
+        let strength = 0;
+
+        if (password.length > 6) strength += 25;
+        if (password.match(/[A-Z]/)) strength += 25;
+        if (password.match(/[0-9]/)) strength += 25;
+        if (password.match(/[^A-Za-z0-9]/)) strength += 25;
+
+        strengthBar.style.width = strength + '%';
+        strengthBar.style.backgroundColor =
+            strength <= 25 ? '#ff4d4d' :
+                strength <= 50 ? '#ffd700' :
+                    strength <= 75 ? '#2ecc71' :
+                        '#27ae60';
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeatCloud Welcome</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 100%;
+            overflow: hidden;
+            padding: 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: #1DB954;
+        }
+
+        .slide h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #1DB954;
+        }
+
+        .slide p {
+            font-size: 14px;
+            color: #cccccc;
+            line-height: 1.5;
+        }
+
+        .nav-buttons {
+            position: fixed;
+            bottom: 40px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            width: 80%;
+            padding: 14px 0;
+            border: none;
+            border-radius: 50px;
+            background: #1DB954;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #0a903b;
+            transform: scale(1.05);
+        }
+
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #666;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .dot.active {
+            background: #1DB954;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="slider">
+        <div class="slide active">
+            <span class="material-icons-outlined slide-icon">music_note</span>
+            <h2>Welcome to BeatCloud</h2>
+            <p>Your music, everywhere you go</p>
+        </div>
+        <div class="slide">
+            <span class="material-icons-outlined slide-icon">cloud</span>
+            <h2>Sync Anywhere</h2>
+            <p>Access your music across all your devices seamlessly</p>
+        </div>
+        <div class="slide">
+            <span class="material-icons-outlined slide-icon">smartphone</span>
+            <h2>Multi-Device Support</h2>
+            <p>Switch between devices without missing a beat</p>
+        </div>
+        <div class="slide">
+            <span class="material-icons-outlined slide-icon">autorenew</span>
+            <h2>Real-time Sync</h2>
+            <p>Your music library, always up to date</p>
+        </div>
+    </div>
+    <div class="dots"></div>
+    <div class="nav-buttons">
+        <button class="nav-btn" onclick="skipIntro()">Get Started</button>
+    </div>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dotsContainer = document.querySelector('.dots');
+
+    // Create dots
+    slides.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (index === 0) dot.classList.add('active');
+        dot.onclick = () => goToSlide(index);
+        dotsContainer.appendChild(dot);
+    });
+
+    function updateSlides() {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[currentSlide].classList.add('active');
+
+        document.querySelectorAll('.dot').forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentSlide);
+        });
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        updateSlides();
+    }
+
+    function goToSlide(index) {
+        currentSlide = index;
+        updateSlides();
+    }
+
+    function skipIntro() {
+        window.location.href = '{% url "register" %}';
+    }
+
+    setInterval(nextSlide, 5000);
+</script>
+</body>
+</html>
